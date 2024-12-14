@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
 -- keybindings
 local opt = { noremap = true, silent = true }
 
--- Map
+-- Leader Key Mapping 
 vim.g.mapleader = " "
 
 -- Ctrl + hjkl => Ctrl + w hjkl
@@ -65,17 +65,37 @@ require("lazy").setup({
 		lazy = true,
 	},
 	{
-        'folke/persistence.nvim',
-        event = 'BufReadPre', -- 懒加载配置，只有在读取缓冲区之前才会加载插件
-        config = function()
-            require('persistence').setup({
-                dir = vim.fn.expand(vim.fn.stdpath('data') .. '/persistence'), -- 会话文件存储目录
-                options = { 'buffers', 'curdir', 'tabpages', 'winsize' }, 
-            })
-        end,
+        	'folke/persistence.nvim',
+        	event = 'BufReadPre', -- 懒加载配置，只有在读取缓冲区之前才会加载插件
+        	config = function()
+            	require('persistence').setup({
+                	dir = vim.fn.expand(vim.fn.stdpath('data') .. '/persistence'), -- 会话文件存储目录
+                	options = { 'buffers', 'curdir', 'tabpages', 'winsize' }, 
+            	})
+        	end,
     	},
+	{	
+		cmd = "Telescope",
+    		'nvim-telescope/telescope.nvim', 
+		keys = {
+          		{ "<Leader>p", ":Telescope find_files<CR>", desc = "find files" },
+          		{ "<Leader>P", ":Telescope live_grep<CR>", desc = "grep file" },
+          		{ "<Leader>rs", ":Telescope resume<CR>", desc = "resume" },
+          		{ "<Leader>q", ":Telescope oldfiles<CR>", desc = "oldfiles" },
+		},        	
+		tag = '0.1.8',
+      		dependencies = { 'nvim-lua/plenary.nvim' }
+    	}
 })
 
-vim.cmd.colorscheme("base16-tender")
 
-vim.api.nvim_set_keymap('n', '<leader>ss', ':lua require("persistence").load()<CR>', opt)
+-- Theme
+-- corlorscheme url : https://github.com/RRethy/base16-nvim
+-- Light is good
+vim.cmd.colorscheme("base16-tokyo-city-light")
+-- Night is good
+--vim.cmd.colorscheme("base16-3024")
+--
+vim.api.nvim_set_keymap('n', '<Leader>sl', ':lua require("persistence").load()<CR>', opt)
+
+
