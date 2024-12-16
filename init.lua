@@ -38,10 +38,15 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", opt)
 vim.keymap.set("n", "<Leader>v", "<C-w>v", opt)
 vim.keymap.set("n", "<Leader>s", "<C-w>s", opt)
 
--- 更好的行跳
--- https://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
-vim.keymap.set("n", "j", [[v:count ? 'j' : 'gj']], { noremap = true, expr = true })
-vim.keymap.set("n", "k", [[v:count ? 'k' : 'gk']], { noremap = true, expr = true })
+-- 将 'i', 'k', 'j', 'l' 映射为方向键
+-- gk gj 是用来梳理更好的行跳，视觉行跳
+vim.keymap.set('n', 'i', [[v:count ? 'k' : 'gk']], { noremap = true, expr = true })
+vim.keymap.set('n', 'k', [[v:count ? 'j' : 'gj']], { noremap = true, expr = true })
+vim.keymap.set('n', 'j', [[v:count ? 'h' : 'h']], { noremap = true, expr = true })
+vim.keymap.set('n', 'l', [[v:count ? 'l' : 'l']], { noremap = true, expr = true })
+
+-- 使用 h 进入插入模式
+vim.keymap.set('n', 'h', 'i', { noremap = true, silent = true })
 
 -- lazy.nvim 的配置
 -- lazy.nvim
@@ -68,10 +73,10 @@ require("lazy").setup({
         	'folke/persistence.nvim',
         	event = 'BufReadPre', -- 懒加载配置，只有在读取缓冲区之前才会加载插件
         	config = function()
-            	require('persistence').setup({
+            		require('persistence').setup({
                 	dir = vim.fn.expand(vim.fn.stdpath('data') .. '/persistence'), -- 会话文件存储目录
                 	options = { 'buffers', 'curdir', 'tabpages', 'winsize' }, 
-            	})
+            		})
         	end,
     	},
 	{	
@@ -85,7 +90,14 @@ require("lazy").setup({
 		},        	
 		tag = '0.1.8',
       		dependencies = { 'nvim-lua/plenary.nvim' }
-    	}
+    	},
+	{
+		event = "VeryLazy",
+		"williamboman/mason.nvim",
+		config = function()
+			require("mason").setup()
+		end,
+	}
 })
 
 
@@ -95,7 +107,9 @@ require("lazy").setup({
 vim.cmd.colorscheme("base16-tokyo-city-light")
 -- Night is good
 --vim.cmd.colorscheme("base16-3024")
---
+
+
+-- 持久化插件的load
 vim.api.nvim_set_keymap('n', '<Leader>sl', ':lua require("persistence").load()<CR>', opt)
 
 
