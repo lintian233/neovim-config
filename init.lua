@@ -63,6 +63,19 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 
+
+-- Helper function to check if there are words before the cursor
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+-- Helper function to feed keys
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	{
@@ -79,27 +92,106 @@ require("lazy").setup({
             		})
         	end,
     	},
-	{	
+	{
 		cmd = "Telescope",
-    		'nvim-telescope/telescope.nvim', 
+    		'nvim-telescope/telescope.nvim',
 		keys = {
           		{ "<Leader>p", ":Telescope find_files<CR>", desc = "find files" },
           		{ "<Leader>P", ":Telescope live_grep<CR>", desc = "grep file" },
           		{ "<Leader>rs", ":Telescope resume<CR>", desc = "resume" },
           		{ "<Leader>q", ":Telescope oldfiles<CR>", desc = "oldfiles" },
-		},        	
+		},
 		tag = '0.1.8',
       		dependencies = { 'nvim-lua/plenary.nvim' }
     	},
 	{
 		event = "VeryLazy",
 		"williamboman/mason.nvim",
-		config = function()
-			require("mason").setup()
-		end,
-	}
+		"williamboman/mason-lspconfig.nvim",
+    		"neovim/nvim-lspconfig",
+	},
+	{
+		'neovim/nvim-lspconfig',
+       		config = function()
+         		local capabilities = require('cmp_nvim_lsp').default_capabilities()
+         		-- 替换 <YOUR_LSP_SERVER> 为你使用的 LSP 服务器名称
+         		require('lspconfig')['lua_ls'].setup {
+           		capabilities = capabilities
+         		}
+       		end,
+	},
+     	-- 配置 nvim-cmp 和相关插件
+     	{
+		'hrsh7th/nvim-cmp',
+       		dependencies = {
+         		'hrsh7th/cmp-nvim-lsp',
+         		'hrsh7th/cmp-buffer',
+         		'hrsh7th/cmp-path',
+         		'hrsh7th/cmp-cmdline',
+         		'hrsh7th/cmp-vsnip',
+         		'hrsh7th/vim-vsnip',
+       		},
+       		config = function()
+		local cmp = require'cmp'
+		cmp.setup({
+			snippet = {
+				expand = function(args)
+					vim.fn["vsnip#anonymous"](args.body) -- 使用 vsnip
+				end,
+			},
+			mapping = {
+				['<C-b>'] = cmp.mapping.scroll_docs(-4),
+				['<C-f>'] = cmp.mapping.scroll_docs(4),
+				['<C-Space>'] = cmp.mapping.complete(),
+				['<C-e>'] = cmp.mapping.abort(),
+				['<CR>'] = cmp.mapping.confirm({ select = true }), -- 确认选择
+				['<Tab>'] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_next_item()
+					elseif vim.fn["vsnip#available"](1) == 1 then
+						feedkey("<Plug>(vsnip-expand-or-jump)", "")
+				      	elseif has_words_before() then
+					        cmp.complete()
+      					else
+        					fallback() -- 如果没有补全项可用，则执行默认的 `<Tab>` 行为
+					end
+				end, { "i", "s" }),
+				['<S-Tab>'] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_prev_item()
+					elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        					feedkey("<Plug>(vsnip-jump-prev)", "")
+      					else
+        					fallback() -- 如果没有补全项可用，则执行默认的 `<S-Tab>` 行为
+      					end
+				end, { "i", "s" }),
+			},
+			sources = cmp.config.sources({
+				{ name = 'nvim_lsp' },
+				{ name = 'vsnip' },
+			}, {
+				{ name = 'buffer' },
+			})
+		})
+         	-- 配置命令行补全
+         	cmp.setup.cmdline({ '/', '?' }, {
+           		mapping = cmp.mapping.preset.cmdline(),
+           		sources = {
+             		{ name = 'buffer' }
+           		}
+         	})
+         	cmp.setup.cmdline(':', {
+           		mapping = cmp.mapping.preset.cmdline(),
+           		sources = cmp.config.sources({
+             		{ name = 'path' }
+           		}, {
+             		{ name = 'cmdline' }
+           		}),
+           		matching = { disallow_symbol_nonprefix_matching = false }
+         	})
+       		end
+     	},
 })
-
 
 -- Theme
 -- corlorscheme url : https://github.com/RRethy/base16-nvim
@@ -112,4 +204,12 @@ vim.cmd.colorscheme("base16-tokyo-city-light")
 -- 持久化插件的load
 vim.api.nvim_set_keymap('n', '<Leader>sl', ':lua require("persistence").load()<CR>', opt)
 
+
+-- LSP CONFIG
+local lspconfig = require('lspconfig')
+require("mason").setup()
+require("mason-lspconfig").setup()
+
+require("lspconfig").lua_ls.setup {}
+require("lspconfig").pyright.setup{}
 
