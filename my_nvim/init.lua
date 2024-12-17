@@ -1,7 +1,6 @@
 
 -- this is a Lua configuration file of the neovim
 
-
 local set = vim.o
 
 set.number = true
@@ -28,24 +27,28 @@ local opt = { noremap = true, silent = true }
 -- Leader Key Mapping 
 vim.g.mapleader = " "
 
--- Ctrl + hjkl => Ctrl + w hjkl
-vim.keymap.set("n", "<C-h>", "<C-w>h", opt)
-vim.keymap.set("n", "<C-j>", "<C-w>j", opt)
-vim.keymap.set("n", "<C-k>", "<C-w>k", opt)
-vim.keymap.set("n", "<C-l>", "<C-w>l", opt)
-
 -- Ctrl + v or s => Ctrl + w + v s
 vim.keymap.set("n", "<Leader>v", "<C-w>v", opt)
 vim.keymap.set("n", "<Leader>s", "<C-w>s", opt)
 
 -- 将 'i', 'k', 'j', 'l' 映射为方向键
--- gk gj 是用来梳理更好的行跳，视觉行跳
 vim.keymap.set('n', 'i', [[v:count ? 'k' : 'gk']], { noremap = true, expr = true })
 vim.keymap.set('n', 'k', [[v:count ? 'j' : 'gj']], { noremap = true, expr = true })
 vim.keymap.set('n', 'j', [[v:count ? 'h' : 'h']], { noremap = true, expr = true })
 vim.keymap.set('n', 'l', [[v:count ? 'l' : 'l']], { noremap = true, expr = true })
 
--- 使用 h 进入插入模式
+vim.keymap.set('v', 'i', [[v:count ? 'k' : 'gk']], { noremap = true, expr = true })
+vim.keymap.set('v', 'k', [[v:count ? 'j' : 'gj']], { noremap = true, expr = true })
+vim.keymap.set('v', 'j', [[v:count ? 'h' : 'h']], { noremap = true, expr = true })
+vim.keymap.set('v', 'l', [[v:count ? 'l' : 'l']], { noremap = true, expr = true })
+
+-- 在插入模式下映射 Ctrl + i, Ctrl + k, Ctrl + j, Ctrl + l
+vim.api.nvim_set_keymap('i', '<A-i>', '<Up>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-k>', '<Down>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-j>', '<Left>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-l>', '<Right>', { noremap = true, silent = true })
+
+vim.keymap.set('i', '<A-h>','<Esc>', opt)
 vim.keymap.set('n', 'h', 'i', { noremap = true, silent = true })
 
 -- lazy.nvim 的配置
@@ -120,77 +123,70 @@ require("lazy").setup({
          		}
        		end,
 	},
-     	-- 配置 nvim-cmp 和相关插件
-     	{
-		'hrsh7th/nvim-cmp',
-       		dependencies = {
-         		'hrsh7th/cmp-nvim-lsp',
-         		'hrsh7th/cmp-buffer',
-         		'hrsh7th/cmp-path',
-         		'hrsh7th/cmp-cmdline',
-         		'hrsh7th/cmp-vsnip',
-         		'hrsh7th/vim-vsnip',
-       		},
-       		config = function()
+	{
+	    'hrsh7th/nvim-cmp',
+	    dependencies = {
+		'hrsh7th/cmp-nvim-lsp',
+		'hrsh7th/cmp-buffer',
+		'hrsh7th/cmp-path',
+		'hrsh7th/cmp-cmdline',
+		'hrsh7th/cmp-vsnip',
+		'hrsh7th/vim-vsnip',
+	    },
+	    config = function()
 		local cmp = require'cmp'
 		cmp.setup({
-			snippet = {
-				expand = function(args)
-					vim.fn["vsnip#anonymous"](args.body) -- 使用 vsnip
-				end,
-			},
-			mapping = {
-				['<C-b>'] = cmp.mapping.scroll_docs(-4),
-				['<C-f>'] = cmp.mapping.scroll_docs(4),
-				['<C-Space>'] = cmp.mapping.complete(),
-				['<C-e>'] = cmp.mapping.abort(),
-				['<CR>'] = cmp.mapping.confirm({ select = true }), -- 确认选择
-				['<Tab>'] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					elseif vim.fn["vsnip#available"](1) == 1 then
-						feedkey("<Plug>(vsnip-expand-or-jump)", "")
-				      	elseif has_words_before() then
-					        cmp.complete()
-      					else
-        					fallback() -- 如果没有补全项可用，则执行默认的 `<Tab>` 行为
-					end
-				end, { "i", "s" }),
-				['<S-Tab>'] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        					feedkey("<Plug>(vsnip-jump-prev)", "")
-      					else
-        					fallback() -- 如果没有补全项可用，则执行默认的 `<S-Tab>` 行为
-      					end
-				end, { "i", "s" }),
-			},
-			sources = cmp.config.sources({
-				{ name = 'nvim_lsp' },
-				{ name = 'vsnip' },
-			}, {
-				{ name = 'buffer' },
-			})
+		    snippet = {
+			expand = function(args)
+			    vim.fn["vsnip#anonymous"](args.body) -- 使用 vsnip
+			end,
+		    },
+		    mapping = {
+			['<C-b>'] = cmp.mapping.scroll_docs(-4),
+			['<C-f>'] = cmp.mapping.scroll_docs(4),
+			--['<C-Space>'] = cmp.mapping.complete(),
+			['<C-e>'] = cmp.mapping.abort(),
+			['<CR>'] = cmp.mapping.confirm({ select = true }), -- 确认选择
+			['<Tab>'] = cmp.mapping(function(fallback)
+			    if cmp.visible() then
+				cmp.confirm({ select = true })
+			    else
+				fallback() -- 如果没有补全菜单，执行默认行为
+			    end
+			end, { 'i', 's' }),
+			['<S-Tab>'] = cmp.mapping(function(fallback)
+			    if cmp.visible() then
+				cmp.confirm({ select = true }) -- 自动确认第一个结果
+			    else
+				fallback() -- 如果没有补全菜单，执行默认行为
+			    end
+			end, { 'i', 's' }),
+		    },
+		    sources = cmp.config.sources({
+			{ name = 'nvim_lsp' },
+			{ name = 'vsnip' },
+		    }, {
+			{ name = 'buffer' },
+		    })
 		})
-         	-- 配置命令行补全
-         	cmp.setup.cmdline({ '/', '?' }, {
-           		mapping = cmp.mapping.preset.cmdline(),
-           		sources = {
-             		{ name = 'buffer' }
-           		}
-         	})
-         	cmp.setup.cmdline(':', {
-           		mapping = cmp.mapping.preset.cmdline(),
-           		sources = cmp.config.sources({
-             		{ name = 'path' }
-           		}, {
-             		{ name = 'cmdline' }
-           		}),
-           		matching = { disallow_symbol_nonprefix_matching = false }
-         	})
-       		end
-     	},
+		-- 配置命令行补全
+		cmp.setup.cmdline({ '/', '?' }, {
+		    mapping = cmp.mapping.preset.cmdline(),
+		    sources = {
+			{ name = 'buffer' }
+		    }
+		})
+		cmp.setup.cmdline(':', {
+		    mapping = cmp.mapping.preset.cmdline(),
+		    sources = cmp.config.sources({
+			{ name = 'path' }
+		    }, {
+			{ name = 'cmdline' }
+		    }),
+		    matching = { disallow_symbol_nonprefix_matching = false }
+		})
+	    end
+	},
 })
 
 -- Theme
