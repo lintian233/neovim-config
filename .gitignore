@@ -2,6 +2,7 @@
 
 
 # nvim
-./kickstart.nvim/
-./README.md
+kickstart.nvim
+lazy-lock.json
+
 
