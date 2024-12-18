@@ -388,7 +388,14 @@ require("lazy").setup({
 				--  All the info you're looking for is in `:help telescope.setup()`
 				defaults = {
 					layout_strategy = "horizontal",
-					layout_config = { width = 0.6 },
+					layout_config = {
+						horizontal = {
+							preview_width = 0.3, -- 设置预览窗口的宽度为 30%
+							results_width = 0.7, -- 设置搜索结果窗口的宽度为 70%
+						},
+						width = 0.8, -- 整体窗口的宽度为 80% 的屏幕宽度
+						height = 0.8, -- 整体窗口的高度为 80% 的屏幕高度
+					},
 				},
 				-- defaults = {
 				--   mappings = {
