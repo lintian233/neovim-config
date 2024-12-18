@@ -390,11 +390,11 @@ require("lazy").setup({
 					layout_strategy = "horizontal",
 					layout_config = {
 						horizontal = {
-							preview_width = 0.3, -- 设置预览窗口的宽度为 30%
-							results_width = 0.7, -- 设置搜索结果窗口的宽度为 70%
+							preview_width = 0.6, -- 设置预览窗口的宽度为 30%
+							results_width = 0.4, -- 设置搜索结果窗口的宽度为 70%
 						},
-						width = 0.8, -- 整体窗口的宽度为 80% 的屏幕宽度
-						height = 0.8, -- 整体窗口的高度为 80% 的屏幕高度
+						width = 0.9, -- 整体窗口的宽度为 80% 的屏幕宽度
+						height = 0.9, -- 整体窗口的高度为 80% 的屏幕高度
 					},
 				},
 				-- defaults = {
@@ -966,11 +966,11 @@ require("lazy").setup({
 	--  Here are some example plugins that I've included in the Kickstart repository.
 	--  Uncomment any of the lines below to enable them (you will need to restart nvim).
 	--
-	-- require 'kickstart.plugins.debug',
-	-- require 'kickstart.plugins.indent_line',
-	-- require 'kickstart.plugins.lint',
-	-- require 'kickstart.plugins.autopairs',
-	-- require 'kickstart.plugins.neo-tree',
+	require("kickstart.plugins.debug"),
+	require("kickstart.plugins.indent_line"),
+	require("kickstart.plugins.lint"),
+	require("kickstart.plugins.autopairs"),
+	require("kickstart.plugins.neo-tree"),
 	-- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
