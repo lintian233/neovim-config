@@ -259,7 +259,7 @@ require("lazy").setup({
 		"github/copilot.vim",
 		config = function()
 			vim.g.copilot_no_tab_map = true
-			vim.api.nvim_set_keymap("i", "<C-e>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
+			vim.api.nvim_set_keymap("i", "<C-\\>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
 		end,
 	},
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -730,7 +730,7 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
+				python = { "isort", "black" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				-- javascript = { "prettierd", "prettier", stop_after_first = true },
