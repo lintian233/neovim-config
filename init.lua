@@ -147,6 +147,9 @@ vim.opt.splitbelow = true
 --  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.opt.tabstop = 4 -- 设置 Tab 键的宽度为 4 个空格
+vim.opt.shiftwidth = 4 -- 设置自动缩进时的宽度为 4 个空格
+vim.opt.expandtab = true -- 将 Tab 转换为空格
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
@@ -254,14 +257,8 @@ require("lazy").setup({
 			},
 		},
 	},
-
-	{
-		"github/copilot.vim",
-		config = function()
-			vim.g.copilot_no_tab_map = true
-			vim.api.nvim_set_keymap("i", "<C-\\>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
-		end,
-	},
+	require("custom.plugins.copilot"),
+	require("custom.plugins.copilot-chatbox"),
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
 	--
 	-- This is often very useful to both group configuration, as well as handle
@@ -855,25 +852,6 @@ require("lazy").setup({
 			})
 		end,
 	},
-
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		init = function()
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
-
-			-- You can configure highlights by doing something like:
-			vim.cmd.hi("Comment gui=none")
-		end,
-	},
-
 	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
@@ -962,7 +940,9 @@ require("lazy").setup({
 	-- place them in the correct locations.
 
 	-- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-	--
+	require("custom.plugins.markdown-render"),
+	require("custom.plugins.vscode-themes"),
+	require("custom.plugins.persistence"),
 	--  Here are some example plugins that I've included in the Kickstart repository.
 	--  Uncomment any of the lines below to enable them (you will need to restart nvim).
 	--
