@@ -118,6 +118,7 @@ vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
 
+-- Set verbose=1
 -- Enable break indent
 vim.opt.breakindent = true
 
@@ -149,7 +150,6 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.tabstop = 4 -- 设置 Tab 键的宽度为 4 个空格
 vim.opt.shiftwidth = 4 -- 设置自动缩进时的宽度为 4 个空格
-vim.opt.expandtab = true -- 将 Tab 转换为空格
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
@@ -727,12 +727,13 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				python = { "isort", "black" },
+				python = { "isort", "black", stop_after_first = true },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				-- javascript = { "prettierd", "prettier", stop_after_first = true },
-				markdown = { "prettier" },
-				-- go languange
+				markdown = { "prettier", "markdownlint", stop_after_first = true },
+				-- go language
+				go = { "gofmt", "goimports", stop_after_first = true },
 			},
 		},
 	},
@@ -942,6 +943,7 @@ require("lazy").setup({
 	-- place them in the correct locations.
 
 	-- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
+	require("custom.plugins.pick-emoji"),
 	require("custom.plugins.markdown-render"),
 	require("custom.plugins.vscode-themes"),
 	require("custom.plugins.persistence"),
