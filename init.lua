@@ -634,7 +634,9 @@ require("lazy").setup({
 			local servers = {
 				clangd = {},
 				gopls = {},
-				pyright = {},
+				pyright = {
+					filetypes = { "python", "pyx", "pxd" },
+				},
 				rust_analyzer = {},
 				cmake = {
 					cmd = { "cmake-language-server" },
