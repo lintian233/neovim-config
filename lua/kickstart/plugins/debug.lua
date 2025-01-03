@@ -97,6 +97,7 @@ return {
 				-- Update this to ensure that you have the debuggers for the langs you want
 				"delve",
 				"debugpy",
+				"cpptools",
 			},
 		})
 
@@ -137,5 +138,28 @@ return {
 
 		-- Install python specific config
 		require("dap-python").setup("python")
+		-- Install C/C++ specific config
+		dap.adapters.cppdbg = {
+			id = "cppdbg",
+			type = "executable",
+			command = vim.fn.stdpath("data") .. "/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",
+		}
+
+		dap.configurations.cpp = dap.configurations.cpp or {}
+
+		table.insert(dap.configurations.cpp, {
+			name = "Launch with args",
+			type = "cppdbg",
+			request = "launch",
+			program = function()
+				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+			end,
+			cwd = "${workspaceFolder}",
+			stopOnEntry = false,
+			args = function()
+				local input = vim.fn.input("Program arguments: ")
+				return vim.split(input, " ")
+			end,
+		})
 	end,
 }
