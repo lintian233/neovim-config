@@ -80,7 +80,6 @@ If you experience any errors while trying to install kickstart, run `:checkhealt
 
 I hope you enjoy your Neovim journey,
 - TJ
-
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
@@ -257,8 +256,8 @@ require("lazy").setup({
 			},
 		},
 	},
-	require("custom.plugins.copilot"),
-	require("custom.plugins.copilot-chatbox"),
+	--	require("custom.plugins.copilot"),
+	--	require("custom.plugins.copilot-chatbox"),
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
 	--
 	-- This is often very useful to both group configuration, as well as handle
@@ -786,7 +785,7 @@ require("lazy").setup({
 			--  into multiple repos for maintenance purposes.
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-copilot",
+			--"hrsh7th/cmp-copilot",
 		},
 		config = function()
 			-- See `:help cmp`
@@ -863,7 +862,7 @@ require("lazy").setup({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
-					{ name = "copilot" },
+					--{ name = "copilot" },
 				},
 			})
 		end,
@@ -956,6 +955,7 @@ require("lazy").setup({
 	-- place them in the correct locations.
 
 	-- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
+	require("custom.plugins.avante"),
 	require("custom.plugins.pick-emoji"),
 	require("custom.plugins.markdown-render"),
 	require("custom.plugins.vscode-themes"),
