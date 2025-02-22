@@ -957,8 +957,10 @@ require("lazy").setup({
 	-- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
 	require("custom.plugins.avante"),
 	require("custom.plugins.pick-emoji"),
+	require("custom.plugins.comment"),
 	require("custom.plugins.markdown-render"),
 	require("custom.plugins.vscode-themes"),
+	--require("custom.plugins.tokyonight-themes"),
 	require("custom.plugins.persistence"),
 	--  Here are some example plugins that I've included in the Kickstart repository.
 	--  Uncomment any of the lines below to enable them (you will need to restart nvim).
