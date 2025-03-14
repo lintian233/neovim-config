@@ -1,7 +1,20 @@
 return {
-	"github/copilot.vim",
+	"zbirenbaum/copilot.lua",
 	config = function()
-		vim.g.copilot_no_tab_map = true
-		vim.api.nvim_set_keymap("i", "<C-\\>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
+		require("copilot").setup({
+			suggestion = {
+				auto_trigger = true,
+				keymap = {
+					accept = "<C-\\>",
+				},
+			},
+		})
+		-- 更稳定的快捷键绑定
+		vim.api.nvim_set_keymap(
+			"i",
+			"<C-\\>",
+			[[<cmd>lua require('copilot.suggestion').accept()<CR>]],
+			{ noremap = true, silent = true }
+		)
 	end,
 }

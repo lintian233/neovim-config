@@ -82,7 +82,6 @@ I hope you enjoy your Neovim journey,
 - TJ
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -256,8 +255,8 @@ require("lazy").setup({
 			},
 		},
 	},
-	--	require("custom.plugins.copilot"),
-	--	require("custom.plugins.copilot-chatbox"),
+	require("custom.plugins.copilot"),
+	--require("custom.plugins.copilot-chatbox"),
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
 	--
 	-- This is often very useful to both group configuration, as well as handle
@@ -785,7 +784,6 @@ require("lazy").setup({
 			--  into multiple repos for maintenance purposes.
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
-			--"hrsh7th/cmp-copilot",
 		},
 		config = function()
 			-- See `:help cmp`
@@ -862,7 +860,7 @@ require("lazy").setup({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
-					--{ name = "copilot" },
+					{ name = "copilot" },
 				},
 			})
 		end,
