@@ -664,14 +664,14 @@ require("lazy").setup({
 						},
 					},
 				},
-				require("lspconfig").ccls.setup({
-					init_options = {
-						cache = {
-							directory = ".ccls-cache",
-						},
-						filetypes = { "c", "cpp", "objc", "objcpp", "cu" },
-					},
-				}),
+				-- require("lspconfig").ccls.setup({
+				-- 	init_options = {
+				-- 		cache = {
+				-- 			directory = ".ccls-cache",
+				-- 		},
+				-- 		filetypes = { "c", "cpp", "objc", "objcpp", "cu" },
+				-- 	},
+				-- }),
 				-- Ensure the servers and tools above are installed
 				--  To check the current status of installed tools and/or manually install
 				--  other tools, you can run
