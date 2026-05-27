@@ -10,7 +10,7 @@ return {
 		opts = {
 			model = "gpt-4o",
 			agent = "copilot",
-			context = "nil",
+			context = nil,
 			temperature = 0.2,
 
 			window = {
