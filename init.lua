@@ -338,6 +338,7 @@ require("lazy").setup({
 		branch = "0.1.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
 			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
 				"nvim-telescope/telescope-fzf-native.nvim",
 
@@ -920,7 +921,6 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		branch = "master", -- keep compatibility with current Neovim runtime and query format
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
 			ensure_installed = {
